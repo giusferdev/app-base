@@ -1,0 +1,231 @@
+<!-- Base/frontend/account/verify_email.html -->
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>Verifica Email</title>
+    <meta name="description" content="Verifica il tuo indirizzo email.">
+
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Icone -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/icon-180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../img/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../img/icon-512.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/notte_giorno.css">
+    <link rel="stylesheet" href="../css/account.css">
+    <link rel="stylesheet" href="../css/settings.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+    <!-- JS GLOBALI -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+
+</head>
+
+<body class="light fade-in">
+
+<div id="toast" class="toast"></div>
+
+<header class="app-header">
+    <h1>Verifica Email</h1>
+</header>
+
+<div class="login-container slide-up">
+
+    <h2 class="title-ios">Verifica il tuo indirizzo email</h2>
+    <p class="subtitle" id="subtitleEmail">
+        Ti abbiamo inviato un codice di verifica a:<br>
+        <strong></strong>
+    </p>
+
+    <form class="login-form">
+
+        <div id="errorBox" class="error-box" style="display:none;"></div>
+
+        <div class="input-box">
+            <svg class="icon-input" viewBox="0 0 24 24">
+                <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="19" cy="5" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="5" cy="19" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="19" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="19" cy="19" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+
+            <input type="text" id="verifyCode" maxlength="6" placeholder="Codice a 6 cifre">
+        </div>
+
+        <button id="verifyBtn" class="btn-primary">Verifica</button>
+
+        <div class="resend-box">
+            <p class="resend-text">Non hai ricevuto il codice?</p>
+
+            <button id="resendBtn" class="btn-link resend-btn">
+                Reinvia codice
+            </button>
+
+            <span id="resendTimer" class="resend-timer"></span>
+        </div>
+
+        <div id="successCheck" class="success-check hidden">✓</div>
+    </form>
+</div>
+
+<script>
+// ============================
+// FUNZIONI UI (rimangono identiche)
+// ============================
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.remove("show");
+    void toast.offsetWidth;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
+}
+
+function showError(msg) {
+    const box = document.getElementById("errorBox");
+    box.style.display = "block";
+    box.textContent = msg;
+
+    const input = document.getElementById("verifyCode");
+    input.classList.add("error-shake");
+    setTimeout(() => input.classList.remove("error-shake"), 300);
+}
+
+function showSuccess() {
+    const check = document.getElementById("successCheck");
+    check.classList.remove("hidden");
+
+    setTimeout(() => {
+        check.classList.add("show");
+    }, 50);
+}
+
+// ============================
+// LETTURA EMAIL DA URL
+// ============================
+let pendingEmail = "";
+
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    pendingEmail = params.get("email");
+
+    if (!pendingEmail) {
+        showError("Errore: email non trovata");
+        return;
+    }
+
+    document.querySelector("#subtitleEmail strong").textContent = pendingEmail;
+
+    startTimer();
+});
+
+// ============================
+// TIMER REINVIO CODICE
+// ============================
+let timer = 30;
+const timerEl = document.getElementById("resendTimer");
+const resendBtn = document.getElementById("resendBtn");
+
+function startTimer() {
+    resendBtn.disabled = true;
+    timerEl.textContent = `Puoi reinviare tra ${timer}s`;
+
+    const interval = setInterval(() => {
+        timer--;
+        timerEl.textContent = `Puoi reinviare tra ${timer}s`;
+
+        if (timer <= 0) {
+            clearInterval(interval);
+            timerEl.textContent = "";
+            resendBtn.disabled = false;
+        }
+    }, 1000);
+}
+
+// ============================
+// VERIFICA OTP REALE SUPABASE
+// ============================
+document.getElementById("verifyBtn").addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const code = document.getElementById("verifyCode").value.trim();
+
+    if (code.length !== 6) {
+        showError("Inserisci un codice a 6 cifre");
+        return;
+    }
+
+    const { data, error } = await sb.auth.verifyOtp({
+        email: pendingEmail,
+        token: code,
+        type: "signup"
+    });
+
+    if (error) {
+        console.error(error);
+        return showError("Codice non valido o scaduto");
+    }
+
+    // SUCCESSO
+    showSuccess();
+    showToast("Email verificata!");
+
+    setTimeout(() => {
+        document.body.classList.add("page-exit");
+    }, 500);
+
+    setTimeout(() => {
+        window.location.href = "email_verified.html";
+    }, 1100);
+});
+
+// ============================
+// REINVIO OTP REALE SUPABASE
+// ============================
+resendBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const { error } = await sb.auth.resend({
+        email: pendingEmail,
+        type: "signup"
+    });
+
+    if (error) {
+        console.error(error);
+        return showError("Errore durante il reinvio");
+    }
+
+    showToast("Nuovo codice inviato!");
+    timer = 30;
+    startTimer();
+});
+</script>
+
+</body>
+</html>

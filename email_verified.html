@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+    <!-- META BASE -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>Email verificata</title>
+    <meta name="description" content="La tua email è stata verificata con successo.">
+
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+
+    <!-- Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Icone -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/icon-180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../img/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../img/icon-512.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css?v=1.0 (31)">
+    <link rel="stylesheet" href="../css/notte_giorno.css?v=1.0 (31)">
+    <link rel="stylesheet" href="../css/account.css?v=1.0 (31)">
+    <link rel="stylesheet" href="../css/settings.css?v=1.0 (31)">
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.0 (31)">
+
+    <!-- JS GLOBALI -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+
+</head>
+
+<body class="light fade-in">
+
+<header class="app-header">
+    <h1>Email verificata</h1>
+</header>
+
+<div class="login-container slide-up">
+
+    <div class="success-animation">
+        <svg class="checkmark" viewBox="0 0 52 52">
+            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+            <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17"/>
+        </svg>
+    </div>
+
+    <h2 class="title-ios">Perfetto!</h2>
+    <p class="subtitle">Email verificata con successo.</p>
+
+    <div class="info-box">
+        Ora puoi accedere al tuo account.
+    </div>
+
+    <button id="loginBtn" class="btn-primary verify-success-btn">Accedi</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+        window.location.href = "../dashboard.html";
+    });
+});
+</script>
+
+</body>
+</html>
+
