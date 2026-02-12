@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      const hash = window.location.hash.substring(1);
+      const params = new URLSearchParams(hash);
+      const token = params.get("access_token");
+
+      if (token) {
+        window.location.href = "appbase://verify?token=" + token;
+
+        setTimeout(() => {
+          document.body.innerHTML = `
+            <h2>Email verificata</h2>
+            <p>Se l'app non si è aperta automaticamente, clicca qui:</p>
+            <a href="appbase://verify?token=${token}">Apri l'app</a>
+          `;
+        }, 2000);
+      } else {
+        document.body.innerHTML = "<h2>Token non trovato</h2>";
+      }
+    </script>
+  </body>
+</html>
