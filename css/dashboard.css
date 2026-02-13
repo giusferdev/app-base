@@ -1,0 +1,26 @@
+/* ============================================
+   DASHBOARD — MASCOTTE WIDGET
+============================================ */
+
+.mascotte-widget {
+    background: var(--widget-bg);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.mascotte {
+    width: 120px;
+    height: auto;
+    display: block;
+    margin: 0 auto 12px;
+}
+
+.mascotte-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    opacity: 0.85;
+}

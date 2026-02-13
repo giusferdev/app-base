@@ -1,0 +1,431 @@
+/* ================================
+   Rimuove il rettangolo grigio su iPhone
+================================ */
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================
+   SETTINGS PAGE — iOS STYLE
+============================ */
+
+.settings-section {
+    margin-bottom: 28px;
+}
+
+.settings-title {
+    font-size: 1rem;
+    opacity: 0.6;
+    margin-bottom: 10px;
+}
+
+/* Big button account */
+.settings-big-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--widget-bg);
+    padding: 16px 18px;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    text-decoration: none;
+    color: var(--text);
+}
+
+.settings-big-btn-icon {
+    font-size: 1.4rem;
+    margin-right: 10px;
+}
+
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--widget-bg);
+    padding: 14px 18px;
+    border-radius: 14px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--card-shadow);
+}
+
+.settings-arrow {
+    font-size: 1.4rem;
+    opacity: 0.4;
+}
+
+/* Logout */
+.logout-container {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: #ff3b30;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+}
+
+/* ============================
+   SWITCH iOS STYLE
+============================ */
+
+.settings-switch-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--widget-bg);
+    padding: 14px 18px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--card-shadow);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 26px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+    background-color: var(--accent);
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* ============================
+   POPUP iOS — VERSIONE APP
+============================ */
+
+/* Overlay scuro */
+.ios-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(2px);
+    animation: fadeIn .25s ease-out;
+    z-index: 900;
+}
+
+/* Popup stile iOS */
+.ios-popup {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--widget-bg);
+    border-radius: 22px 22px 0 0;
+    padding-bottom: 30px;
+    max-height: 80vh;
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.15);
+    z-index: 901;
+
+    transform: translateY(100%);
+    will-change: transform;
+    transition: transform .25s ease-out;
+}
+
+/* ⭐ CONTENITORE SCROLLABILE */
+.ios-popup-scroll {
+    max-height: calc(80vh - 90px);
+    overflow-y: auto;
+}
+
+/* Animazioni */
+.slide-up {
+    animation: slideUp .25s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ============================
+   HEADER POPUP — CORRETTO
+============================ */
+
+.ios-popup-header-fixed {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: var(--widget-bg);
+    padding-top: env(safe-area-inset-top);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Header interno: 3 colonne */
+.ios-popup-header-inner {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    height: 56px;
+    padding: 0 12px;
+}
+
+/* Freccia */
+.back-btn {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--accent);
+}
+
+/* Titolo centrato */
+.ios-popup-title {
+    grid-column: 2;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    pointer-events: none;
+}
+
+/* Spacer simmetrico */
+.ios-header-spacer {
+    grid-column: 3;
+    width: 40px;
+    height: 40px;
+}
+
+/* Titolo centrato perfetto */
+.ios-popup-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* Icona freccia */
+.ios-back-icon {
+    width: 22px;
+    height: 22px;
+}
+
+/* Contenuto popup */
+.ios-popup-content {
+    padding: 22px 20px;
+}
+
+/* Spazio extra per evitare che la tabbar copra il contenuto */
+.ios-popup-content {
+    padding: 22px 20px;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom) + 30px);
+}
+
+.ios-popup-scroll {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch; /* fondamentale per iPhone */
+}
+
+
+/* ============================
+   POPUP iOS — EXTRA FEATURES
+============================ */
+
+.ios-grabber {
+    width: 38px;
+    height: 5px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 3px;
+    margin: 12px auto 8px;
+}
+
+.slide-down {
+    animation: slideDown .25s ease-in forwards;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(0); }
+    to   { transform: translateY(100%); }
+}
+
+.fade-out {
+    animation: fadeOut .25s ease-in forwards;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* ============================
+   POPUP iOS — CLEANUP CLASSES
+============================ */
+
+.settings-item-spaced {
+    justify-content: space-between;
+}
+
+.changelog-list {
+    padding-left: 18px;
+    margin: 12px 0 0;
+}
+
+.changelog-item {
+    margin-bottom: 6px;
+}
+
+.changelog-empty {
+    color: #6b7280;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* ============================================
+   SETTINGS — CONTAINER PRINCIPALE
+============================================ */
+.settings {
+    padding: 20px;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
+}
+
+.page-title {
+    margin-top: 38px;
+    margin-bottom: 22px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+/* ============================================
+   SETTINGS — PULSANTE GESTISCI IL TUO ACCOUNT (iOS 17 STYLE)
+============================================ */
+.settings-critical-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 14px 16px;
+    margin-top: 14px;
+
+    border-radius: 12px;
+    background: rgba(255, 80, 80, 0.06); /* soft red tint */
+    border: 1px solid rgba(255, 80, 80, 0.25);
+
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+
+    text-decoration: none;
+    transition: 0.2s ease;
+
+    /* elimina qualsiasi linea */
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.settings-critical-btn:hover {
+    background: rgba(255, 80, 80, 0.12);
+}
+
+/* Icona piccola stile iOS */
+.settings-critical-btn .settings-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.75;
+    flex-shrink: 0;
+}
+
+/* Testo */
+.settings-critical-btn span {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Freccia stile iOS 17 */
+.settings-critical-btn .settings-arrow {
+    font-size: 1.1rem;
+    opacity: 0.45;
+    margin-left: 6px;
+    flex-shrink: 0;
+}
+
+/* Rimuove pseudo-elementi */
+.settings-critical-btn::after,
+.settings-critical-btn::before {
+    display: none !important;
+    border: none !important;
+}
+
+/* Rimuove eventuali linee dal contenitore */
+.settings-section:has(.settings-critical-btn) {
+    border-bottom: none !important;
+}
+
+/* ============================================
+   SETTINGS — PULSANTE LOGOUT
+============================================ */
+.logout-ios17-btn {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(255, 59, 48, 0.08); /* iOS red tint */
+    border: 1px solid rgba(255, 59, 48, 0.25);
+    color: #ff3b30;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.logout-ios17-btn:hover {
+    background: rgba(255, 59, 48, 0.15);
+}
+
+.logout-ios17-btn:active {
+    background: rgba(255, 59, 48, 0.22);
+    transform: scale(0.98);
+}

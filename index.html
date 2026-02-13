@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+    <!-- META BASE -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>MayApp</title>
+    <meta name="description" content="Un'esperienza moderna, veloce e intuitiva progettata per offrirti strumenti intelligenti e un'interfaccia premium.">
+
+    <!-- iOS-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Icone -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="img/icon-512.png">
+
+    <!-- CSS GLOBALI -->
+    <link rel="stylesheet" href="css/style.css?v=1.0 (31)">
+    <link rel="stylesheet" href="css/notte_giorno.css?v=1.0 (31)">
+    <link rel="stylesheet" href="css/menu_bar.css?v=1.0 (31)">
+    <link rel="stylesheet" href="css/settings.css?v=1.0 (31)">
+    <link rel="stylesheet" href="css/dashboard.css?v=1.0 (31)">
+    <link rel="stylesheet" href="css/account.css?v=1.0 (31)">
+
+    <!-- JS GLOBALI -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/theme.js"></script>
+
+</head>
+
+<body class="fade-in" id="appBody">
+
+<div id="toast" class="toast"></div>
+
+<header class="app-header">
+    <h1>NOME APP</h1>
+</header>
+
+<main>
+    <div class="login-container slide-up">
+        <h2 class="title-ios">Accedi</h2>
+        <p class="subtitle">inserisci le tue credenziali</p>
+
+        <div id="loginError" class="error-box" style="display:none;"></div>
+
+        <form class="login-form">
+
+            <div class="input-box">
+                <svg class="icon-input" viewBox="0 0 24 24">
+                    <path d="M4 4h16v16H4z" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M4 8l8 5 8-5" fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <input type="email" id="loginEmail" placeholder="Email" required>
+            </div>
+
+            <div class="input-box password-box">
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <svg id="toggleLoginPassword" class="toggle-eye" viewBox="0 0 24 24">
+                    <path d="M1 12c2-4 6-7 11-7s9 3 11 7c-2 4-6 7-11 7s-9-3-11-7z"
+                          fill="none" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="12" cy="12" r="3"
+                            fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </div>
+
+            <div class="forgot-box small-centered">
+                <a href="account/forgot_password.html">Hai dimenticato la password?</a>
+            </div>
+
+            <button type="button" id="loginBtn" class="btn-primary bounce">Accedi</button>
+        </form>
+
+        <div class="register-box">
+            <p>Non hai un account?</p>
+            <a href="account/register.html" class="btn-secondary">Registrati</a>
+        </div>
+    </div>
+</main>
+
+<script>
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.remove("show");
+    void toast.offsetWidth;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+</script>
+
+<script>
+function startCountdown(seconds) {
+    const errorBox = document.getElementById("loginError");
+    errorBox.style.display = "block";
+
+    const loginBtn = document.getElementById("loginBtn");
+    const forgot = document.querySelector(".forgot-box");
+    const registerBox = document.querySelector(".register-box");
+    const emailInput = document.getElementById("loginEmail");
+    const passInput = document.getElementById("loginPassword");
+
+    loginBtn.disabled = true;
+    loginBtn.classList.add("disabled");
+    loginBtn.style.display = "none";
+    forgot.style.display = "none";
+    registerBox.style.display = "none";
+    emailInput.disabled = true;
+    passInput.disabled = true;
+
+    function update() {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+
+        errorBox.textContent =
+            `Account bloccato. Riprova tra ${m}:${s.toString().padStart(2, '0')}`;
+
+        if (seconds <= 0) {
+            loginBtn.disabled = false;
+            loginBtn.classList.remove("disabled");
+            loginBtn.style.display = "block";
+            forgot.style.display = "block";
+            registerBox.style.display = "block";
+            emailInput.disabled = false;
+            passInput.disabled = false;
+            errorBox.style.display = "none";
+            return;
+        }
+
+        seconds--;
+        setTimeout(update, 1000);
+    }
+
+    update();
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const container = document.querySelector(".login-container");
+    container.classList.add("page-enter");
+
+    const togglePassword = document.getElementById("toggleLoginPassword");
+    const passwordInput = document.getElementById("loginPassword");
+
+    togglePassword.addEventListener("click", () => {
+        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    });
+
+    const loginBtn = document.getElementById("loginBtn");
+    const errorBox = document.getElementById("loginError");
+
+    loginBtn.addEventListener("click", async () => {
+
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = passwordInput.value.trim();
+
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+
+        if (!email || !password) {
+            errorBox.style.display = "block";
+            errorBox.textContent = "Inserisci email e password";
+            return;
+        }
+
+        // LOGIN REALE SUPABASE (USANDO sb)
+        const { data, error } = await sb.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            errorBox.style.display = "block";
+            errorBox.textContent = "Credenziali non valide";
+            return;
+        }
+
+        // Email non verificata
+        if (!data.user.email_confirmed_at) {
+            errorBox.style.display = "block";
+            errorBox.textContent = "Verifica prima la tua email";
+            return;
+        }
+
+        // LOGIN OK
+        showToast("Accesso effettuato!");
+        container.classList.add("page-exit");
+
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 250);
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+/* ================================
+   Rimuove il rettangolo grigio su iPhone
+================================ */
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ================================
+   VARIABILI GLOBALI PER I CERCHI
+================================ */
+
+/* Tema chiaro */
+:root {
+    --ring-gym: #b0c4de;
+    --ring-sick: #add8e6;
+    --ring-closed: #d3d3d3;
+}
+
+/* Tema scuro */
+body.dark {
+    --ring-gym: #ff3b30;
+    --ring-sick: #ff7f30;
+    --ring-closed: #ffbc57;
+}
+
+
+/* ================================
+   TEMA CHIARO — iOS STYLE
+================================ */
+.light {
+    --bg: #f7f7f7;
+    --text: #1c1c1e;
+
+    --widget-bg: #ffffff;
+    --sidebar-bg: #ffffff;
+
+    --input-bg: #f2f2f7;
+    --input-shadow: inset 2px 2px 4px rgba(0,0,0,0.05),
+                    inset -2px -2px 4px rgba(255,255,255,0.8);
+    --input-shadow-focus: inset 1px 1px 3px rgba(0,0,0,0.1),
+                          inset -1px -1px 3px rgba(255,255,255,0.9);
+
+    --card-shadow: 4px 4px 12px rgba(0,0,0,0.08),
+                   -4px -4px 12px rgba(255,255,255,0.9);
+
+    --inner-shadow: inset 3px 3px 6px rgba(0,0,0,0.06),
+                    inset -3px -3px 6px rgba(255,255,255,0.8);
+
+    --accent: #007aff;
+}
+
+/* ================================
+   TEMA SCURO — iOS STYLE
+================================ */
+.dark {
+    --bg: #0d0d0d;
+    --text: #f5f5f7;
+
+    --widget-bg: #1c1c1e;
+    --sidebar-bg: #1c1c1e;
+
+    --input-bg: #2c2c2e;
+    --input-shadow: inset 2px 2px 4px rgba(0,0,0,0.6),
+                    inset -2px -2px 4px rgba(255,255,255,0.05);
+    --input-shadow-focus: inset 1px 1px 3px rgba(0,0,0,0.7),
+                          inset -1px -1px 3px rgba(255,255,255,0.08);
+
+    --card-shadow: 4px 4px 12px rgba(0,0,0,0.7),
+                   -4px -4px 12px rgba(255,255,255,0.05);
+
+    --inner-shadow: inset 3px 3px 6px rgba(0,0,0,0.7),
+                    inset -3px -3px 6px rgba(255,255,255,0.05);
+
+    --accent: #ff3b30;
+}
+
+/* ================================
+   COLORI ICONA TEMA + TAB BAR
+================================ */
+
+/* Tema chiaro */
+.light #toggleTheme,
+.light .nav-btn,
+.light .tab-item {
+    color: #000;
+}
+
+.light .tab-item .icon {
+    stroke: #000;
+}
+
+/* ⭐ AGGIUNTA: pulsanti header in tema chiaro */
+.light .header-btn {
+    color: #000;
+}
+
+/* Tema scuro */
+.dark #toggleTheme,
+.dark .nav-btn,
+.dark .tab-item {
+    color: #fff;
+}
+
+.dark .tab-item .icon {
+    stroke: #fff;
+}
+
+/* ⭐ AGGIUNTA: pulsanti header in tema scuro */
+.dark .header-btn {
+    color: #fff;
+}
+
+/* ================================
+   TAB BAR — BLUR iOS 17
+================================ */
+
+.light .tab-bar {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.dark .tab-bar {
+    background: rgba(28, 28, 30, 0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* ================================
+   STATO ATTIVO (Cambia colore)
+================================ */
+
+.light .tab-item.active .icon,
+.dark .tab-item.active .icon {
+    stroke: var(--accent) !important;
+}
+
+/* ================================
+   PLACEHOLDER INPUT
+================================ */
+.light input::placeholder {
+    color: var(--text);
+    opacity: 0.6;
+}
+
+.dark input::placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
+
+/* ================================
+   TRANSIZIONI MORBIDE
+================================ */
+body,
+.widget,
+input,
+.card,
+#toggleTheme,
+.nav-btn,
+.tab-item {
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+}
+
+/* ================================
+   INPUT — CORREZIONE TEMA SCURO
+================================ */
+
+.light input {
+    color: #1c1c1e;
+}
+
+.dark input {
+    color: #ffffff !important;
+}
+
+.dark input::placeholder {
+    color: #ffffff !important;
+    opacity: 0.5;
+}
+
+/* ================================
+   PULSANTE POPUP WEEKLY-RINGS
+================================ */
+
+/* Tema chiaro → blu iOS */
+.light .btn-primary {
+    background: #007aff;
+    color: #fff;
+}
+
+/* Tema scuro → rosso iOS */
+.dark .btn-primary {
+    background: #ff3b30;
+    color: #fff;
+}
+
+/* ============================================
+   DARK MODE — VARIABILI GLOBALI
+============================================ */
+body.dark {
+    --bg: #000;
+    --text: #fff;
+    --widget-bg: #1c1c1e;
+    --card-bg: #1c1c1e;
+    --card-bg-2: #2c2c2e;
+    --border-color: rgba(255,255,255,0.15);
+}
+
+/* ============================================
+   DARK MODE — LAYOUT GLOBALE
+============================================ */
+body.dark .app-header {
+    background: #1c1c1e;
+    color: #fff;
+    border-bottom-color: rgba(255,255,255,0.1);
+}
+
+body.dark .header-btn {
+    color: #fff;
+}
+
+body.dark main {
+    background: #000;
+}
+
+/* ============================================
+   DARK MODE — CARD E WIDGET
+============================================ */
+body.dark .widget,
+body.dark .apple-card {
+    background: #1c1c1e;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+
+body.dark .apple-label,
+body.dark .apple-level-title {
+    color: #fff;
+}
+
+/* ============================================
+   DARK MODE — BOTTOM SHEET
+============================================ */
+body.dark .bottom-sheet {
+    background: #1c1c1e;
+    color: #fff;
+}
+
+body.dark .sheet-backdrop {
+    background: rgba(0,0,0,0.6);
+}
+
+body.dark .handle {
+    background: rgba(255,255,255,0.35);
+}
+
+/* ============================================
+   DARK MODE — POPUP E OVERLAY
+============================================ */
+body.dark .popup {
+    background: #1c1c1e;
+    color: #fff;
+}
+
+body.dark .app-overlay {
+    background: rgba(0,0,0,0.45);
+}
+
+/* ============================================
+   DARK MODE — FORM E INPUT
+============================================ */
+body.dark input,
+body.dark select,
+body.dark textarea {
+    background: #1c1c1e;
+    color: #fff;
+    border-color: rgba(255,255,255,0.25);
+}
+
+body.dark .btn-primary {
+    background: #0a84ff;
+    color: #fff;
+}
+
+/* ============================================
+   DARK MODE — TOAST
+============================================ */
+body.dark .toast {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* ============================================
+   DARK MODE — ICONE
+============================================ */
+body.dark svg,
+body.dark .icon {
+    color: #fff;
+    fill: #fff;
+}
+
+/* ============================================
+   DARK MODE — DASHBOARD MASCOTTE
+============================================ */
+body.dark .mascotte-widget {
+    background: #1c1c1e;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+
+body.dark .mascotte-text {
+    color: #fff;
+    opacity: 0.9;
+}

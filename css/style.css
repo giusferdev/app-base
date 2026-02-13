@@ -1,0 +1,443 @@
+/* ============================================
+   SAFE AREA iOS — SUPPORTO PER PWA
+============================================ */
+:root {
+    --safe-top: env(safe-area-inset-top);
+    --safe-bottom: env(safe-area-inset-bottom);
+    --safe-left: env(safe-area-inset-left);
+    --safe-right: env(safe-area-inset-right);
+}
+
+/* ============================================
+   FIX PWA iOS — PREVIENE RIPOSIZIONAMENTI
+============================================ */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================
+   FONT PRINCIPALE — SF PRO
+============================================ */
+@font-face {
+    font-family: "SF Pro";
+    src: url("https://cdn.jsdelivr.net/gh/sahibjotsaggu/SF-Pro-Fonts/SF-Pro-Display-Regular.otf") format("opentype");
+    font-weight: 400;
+}
+@font-face {
+    font-family: "SF Pro";
+    src: url("https://cdn.jsdelivr.net/gh/sahibjotsaggu/SF-Pro-Fonts/SF-Pro-Display-Medium.otf") format("opentype");
+    font-weight: 500;
+}
+@font-face {
+    font-family: "SF Pro";
+    src: url("https://cdn.jsdelivr.net/gh/sahibjotsaggu/SF-Pro-Fonts/SF-Pro-Display-Semibold.otf") format("opentype");
+    font-weight: 600;
+}
+@font-face {
+    font-family: "SF Pro";
+    src: url("https://cdn.jsdelivr.net/gh/sahibjotsaggu/SF-Pro-Fonts/SF-Pro-Display-Bold.otf") format("opentype");
+    font-weight: 700;
+}
+
+/* ============================================
+   VARIABILI GLOBALI — TEMA CHIARO (DEFAULT)
+============================================ */
+:root {
+    --bg: #f2f2f7;
+    --text: #1c1c1e;
+    --widget-bg: #ffffff;
+    --card-bg: #ffffff;
+    --card-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    --accent: #0a84ff;
+}
+
+/* ============================================
+   RESET & BASE
+============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================
+   LAYOUT MOBILE-FIRST (VERSIONE ORIGINALE)
+============================================ */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+
+    /* Layout centrato stile app iPhone */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 480px;
+    min-width: 320px;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+#swup {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    display: block;
+
+    /* Safe area corretta */
+    padding-top: calc(50px + var(--safe-top));
+    padding-bottom: calc(80px + var(--safe-bottom));
+
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* ============================================
+   HEADER iOS — VERSIONE SOTTILE E CENTRATA
+============================================ */
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    /* Altezza totale più sottile */
+    height: calc(env(safe-area-inset-top) + 44px);
+
+    background: var(--widget-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* ⭐ Spazio sopra: safe-area + offset minimo */
+    padding-top: calc(env(safe-area-inset-top) + 4px);
+
+    padding-left: 20px;
+    padding-right: 20px;
+
+    box-shadow: var(--card-shadow);
+    z-index: 3000;
+}
+
+/* ============================================
+   TITOLO CENTRATO PERFETTAMENTE
+============================================ */
+.app-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+
+    /* Altezza utile dell’header = 44px */
+    line-height: 44px;
+
+    display: flex;
+    align-items: center;
+}
+
+/* ============================================
+   PULSANTI LATERALI CENTRATI
+============================================ */
+.header-btn {
+    position: absolute;
+
+    /* ⭐ Centratura perfetta con header da 44px */
+    top: calc(env(safe-area-inset-top) + 4px);
+
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: none;
+    background: var(--widget-bg);
+    box-shadow: var(--card-shadow);
+    font-size: 18px;
+}
+
+.left-btn { left: 20px; }
+.right-btn { right: 20px; }
+
+
+/* ============================================
+   WIDGET BASE
+============================================ */
+.widget {
+    background: var(--widget-bg);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+}
+
+/* ============================================
+   BUTTONS
+============================================ */
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 1rem;
+    padding: 10px 16px;
+}
+
+/* ============================================
+   BOTTOM SHEET iOS
+============================================ */
+.sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    z-index: 2500;
+}
+
+.sheet-backdrop.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.bottom-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: var(--widget-bg);
+    border-radius: 22px 22px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+
+    transform: translateY(100%);
+    transition: transform .25s ease-out;
+
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.15);
+
+    height: auto;
+    max-height: 85vh;
+
+    z-index: 3001;
+}
+
+.bottom-sheet.open {
+    transform: translateY(0);
+}
+
+.bottom-sheet.full {
+    height: calc(100vh - env(safe-area-inset-top) - 60px);
+}
+
+.handle {
+    width: 40px;
+    height: 5px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 3px;
+    margin: 10px auto;
+}
+
+.sheet-content {
+    padding: 10px 20px 20px;
+    overflow-y: auto;
+}
+
+/* ============================================
+   TOAST iOS — VERSIONE CORRETTA
+============================================ */
+.toast {
+    position: fixed;
+
+    /* 👇 Safe area corretta per iPhone reale */
+    bottom: calc(24px + var(--safe-bottom));
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+
+    /* 👇 IMPORTANTISSIMO: invisibile e sotto tutto quando nascosto */
+    z-index: -1;
+}
+
+.toast.show {
+    opacity: 1;
+    pointer-events: auto;
+
+    /* 👇 Sopra tutto: header, tabbar, bottom sheet, overlay */
+    z-index: 1000002;
+}
+
+/* ============================================
+   OVERLAY GLOBALE
+============================================ */
+.app-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    z-index: 999999; /* sotto il toast.show */
+}
+
+.app-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ============================================
+   POPUP AGGIORNAMENTO VERSIONE (iOS style)
+============================================ */
+.update-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000002; /* sopra tutto */
+    opacity: 1;
+}
+
+.update-popup-inner {
+    background: var(--widget-bg);
+    padding: 20px;
+    border-radius: 16px;
+    width: 85%;
+    max-width: 360px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+.update-popup-inner p {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    color: var(--text);
+}
+
+.update-popup-inner button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.update-close-btn {
+    position: absolute;
+    top: calc(20px + var(--safe-top));
+    right: 20px;
+    background: none !important;
+    color: white;
+    font-size: 32px;
+    border: none;
+    cursor: pointer;
+}
+
+/* ============================================
+   ANIMAZIONI GLOBALI
+============================================ */
+.fade-in {
+    animation: fadeIn .35s ease-out;
+}
+
+.slide-up {
+    animation: slideUp .35s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================
+   PULSANTI INDIETRO — iOS CLEAN (senza box)
+============================================ */
+.back-btn,
+.legal-back-btn {
+    position: absolute;
+    left: 20px;
+
+    /* Allineamento perfetto sotto la status bar */
+    top: calc(env(safe-area-inset-top) + 4px);
+
+    /* ⭐ Solo icona, nessun box */
+    background: none;
+    border: none;
+    box-shadow: none;
+
+    padding: 0;
+    font-size: 22px; /* freccia più elegante */
+    font-weight: 400;
+    color: var(--text);
+
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.back-btn:active,
+.legal-back-btn:active {
+    opacity: 0.5;
+}
+
+/* ============================================
+   PULSANTE FLOTANTE (SCROLL DOWN) — iOS STYLE
+============================================ */
+.floating-scroll-btn {
+    position: fixed;
+    right: 20px;
+    bottom: calc(20px + var(--safe-bottom));
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--widget-bg);
+    box-shadow: var(--card-shadow);
+    border: none;
+    font-size: 22px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5000;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.floating-scroll-btn:active {
+    transform: scale(0.92);
+}
+
+.floating-scroll-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
